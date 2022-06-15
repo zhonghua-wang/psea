@@ -129,8 +129,3 @@ class PSEA(object):
 
 if __name__ == '__main__':
     pass
-    # _hpo = HPO()
-    # psea = PSEA(_hpo)
-    # hpo_li = ['HP:0008619', 'HP:0004322']
-    # print('verbose', psea.predict_pkl_verbose(hpo_li).head())
-    # print('ori', psea.predict_pkl(hpo_li).head())

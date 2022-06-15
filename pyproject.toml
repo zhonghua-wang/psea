@@ -1,0 +1,29 @@
+[project]
+name = "psea"
+version = "0.1.0"
+description = "PSEA: a phenotype-driven prioritizer for next-generation sequencing with high tolerance to phenotypic noise"
+authors = [
+    { name = "wangzhonghua", email = "wangzhonghua@genomics.cn" },
+]
+dependencies = [
+    "pandas>=0.25.3",
+    "obonet>=0.3.0",
+    "typer>=0.4.1",
+    "requests>=2.27.1",
+    "tqdm>=4.64.0",
+    "loguru>=0.6.0",
+]
+requires-python = ">=3.6"
+readme = "README.md"
+license = { text = "MIT" }
+
+[project.optional-dependencies]
+[tool.pdm]
+[tool.pdm.dev-dependencies]
+test = [
+    "pytest>=7.0.1",
+]
+
+[build-system]
+requires = ["pdm-pep517>=0.12.0"]
+build-backend = "pdm.pep517.api"

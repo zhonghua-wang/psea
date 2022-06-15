@@ -2,19 +2,23 @@
 
 ## Install
 
-1. obtain the source code
+1. obtain the source code or install from pip
    ``` bash
    git clone https://github.com/zhonghua-wang/psea.git
+   ```
+   ~~or install from pip~~ (TODO)
+   ``` bash
+   pip install psea
    ```
 2. install requirements (python3)
    ```bash
    pip install requirements.txt
    ```
-3. download the required data from [one drive](https://bgitech-my.sharepoint.com/:u:/g/personal/wangzhonghua_genomics_cn/EXc8EePI5ktIsEdnDFtRvtABSibr-T4vaGt6iELtvS-KOw?e=S6qUEm)
-   1. change directory to `psea`
-   2. `mkdir -p data/hpo && cd data/hpo`
-   3. tar xvf 2020-03-13.tar.gz
-
+3. Download and build datasets
+   ```bash
+   python -m psea download-hpo
+   python -m psea build # This step may take a few hours
+   ```
 ## usage
 
 Please refer to the notebook.
