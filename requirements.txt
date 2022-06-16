@@ -1,3 +1,8 @@
 pandas
 networkx
 obonet
+tqdm
+typer
+requests
+loguru
+pandarallel

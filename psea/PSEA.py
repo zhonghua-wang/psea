@@ -11,7 +11,7 @@ class PSEA(object):
             self.hpo = HPO()
         else:
             self.hpo = hpo
-        self.param = settings.HPO_PARAMS[self.hpo.version]
+        self.param = settings.HPO_PARAMS.get(self.hpo.version) or settings.HPO_PARAMS['default']
 
     def size_rs_mean(self, size):
         return self.param['MEAN_PARAM'] * size
@@ -59,14 +59,14 @@ class PSEA(object):
         else:
             return (_value - MIN) / (2 * (0 - MIN))
 
-    def predict_pkl(self, hpo_list, sort=True, add_parent=False, norm_value=False):
+    def predict_pkl(self, hpo_list, sort=True, add_parent=False, norm_value=False) -> pd.DataFrame:
         """
         predict gene rank of specified hpo list
         :param hpo_list: hpo list
         :param sort: True to return sorted list
         :param add_parent: add parent hpo if hpo_list have empty gene list
         :param norm: normalize zscore to 0~1 to a new column score
-        :return:
+        :return: predicted DataFrame
         """
         result_df = self.hpo.gene_hpo_sim_df[self.hpo.gene_hpo_sim_df.index.isin(set(hpo_list))]
         if len(result_df) == 0 and add_parent:
@@ -114,7 +114,7 @@ class PSEA(object):
 
         rs_df = pd.merge(result_df.transpose(), self.hpo.gene_hpo_size, left_index=True, right_index=True)
 
-        rs_df[new_hpo_list] = rs_df[new_hpo_list].sub(rs_df['size'].map(self.size_rs_mean), axis='index')\
+        rs_df[new_hpo_list] = rs_df[new_hpo_list].sub(rs_df['size'].map(self.size_rs_mean), axis='index') \
             .div(rs_df['size'].map(lambda x: self.size_rs_std(x * len(new_hpo_list))), axis='index')
         rs_df['zscore'] = rs_df[new_hpo_list].sum(axis=1)
         rs_df.index.name = 'gene_id'
@@ -129,8 +129,3 @@ class PSEA(object):
 
 if __name__ == '__main__':
     pass
-    # _hpo = HPO()
-    # psea = PSEA(_hpo)
-    # hpo_li = ['HP:0008619', 'HP:0004322']
-    # print('verbose', psea.predict_pkl_verbose(hpo_li).head())
-    # print('ori', psea.predict_pkl(hpo_li).head())
