@@ -71,6 +71,11 @@ class HPO:
         self.gene_hpo_sim_df = None
         self.hpo_hpo_sim_df = None
 
+        if os.path.exists(self.hpo_conf.hpo_hpo_similarity_pkl_path):
+            self.hpo_hpo_sim_df = pd.read_pickle(self.hpo_conf.hpo_hpo_similarity_pkl_path)
+        if os.path.exists(self.hpo_conf.hpo_gene_similarity_pkl_path):
+            self.gene_hpo_sim_df = pd.read_pickle(self.hpo_conf.hpo_gene_similarity_pkl_path)
+
         # if gene_hpo_pkl is None or not os.path.exists(gene_hpo_pkl):
         #     self.gene_hpo_sim_df = None
         # else:
@@ -166,12 +171,13 @@ class HPO:
         return max(sim_list) if len(sim_list) > 0 else 0
 
     def get_hpo_sim_pkl(self, hpo1, hpo2):
-        return self.hpo_hpo_sim_pkl.get((hpo1, hpo2), 0) or self.hpo_hpo_sim_pkl.get((hpo2, hpo1), 0)
+        return self.hpo_hpo_sim_df.get((hpo1, hpo2), 0) or self.hpo_hpo_sim_df.get((hpo2, hpo1), 0)
 
     def get_hpo_set_sim_pkl(self, hpo_set_1, hpo_set_2, cutoff=0):
         return sum(
-            filter(lambda x: x >= cutoff,
-                   [self.get_hpo_sim_pkl(x, y) for x, y in it.product(hpo_set_1, hpo_set_2)])
+            filter(
+                lambda x: x >= cutoff, [self.get_hpo_sim_pkl(x, y) for x, y in it.product(hpo_set_1, hpo_set_2)]
+            )
         )
 
     def get_set_ic_sim(self, set1, set2):
@@ -248,8 +254,10 @@ class HPO:
 
     def get_hpo_set_eric_similarity(self, hpo_set_1, hpo_set_2, cutoff=0):
         return sum(
-            filter(lambda x: x >= cutoff,
-                   [self.get_eric_similarity_unweighted(x, y) for x, y in it.product(hpo_set_1, hpo_set_2)])
+            filter(
+                lambda x: x >= cutoff,
+                [self.get_eric_similarity_unweighted(x, y) for x, y in it.product(hpo_set_1, hpo_set_2)]
+            )
         )
 
     def gene_symbol_to_hpo(self, gene_symbol, full=False):

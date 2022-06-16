@@ -17,8 +17,8 @@ class HPOConfig:
     _genes_to_phenotype_name: str = 'genes_to_phenotype.txt'
     _phenotype_to_genes_name: str = 'phenotype_to_genes.txt'
     _annotation_name: str = 'phenotype.hpoa'
-    _hpo_hpo_similarity_pkl_name: str = 'hpo-hpo-similarity.txt'
-    _hpo_gene_similarity_pkl_name: str = 'hpo-gene-similarity.txt'
+    _hpo_hpo_similarity_pkl_name: str = 'hpo-hpo-similarity.pkl'
+    _hpo_gene_similarity_pkl_name: str = 'hpo-gene-similarity.pkl'
     _version: str = ''
 
     GENES_TO_PHENOTYPE_URL = 'http://purl.obolibrary.org/obo/hp/hpoa/genes_to_phenotype.txt'
@@ -112,7 +112,7 @@ class HPOConfig:
         return os.path.join(self.hpo_dir, self._hpo_hpo_similarity_pkl_name)
 
     @property
-    def hpo_gene_similarity_pkl_name(self):
+    def hpo_gene_similarity_pkl_path(self):
         # _path = os.path.join(self.hpo_dir, self._hpo_gene_similarity_pkl_name)
         # if not os.path.exists(_path):
         #     raise FileNotFoundError(

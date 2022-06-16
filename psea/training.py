@@ -47,12 +47,12 @@ def create_hpo_gene_pkl(hpo: HPO, nb_workers=1):
     if nb_workers > 1:
         try:
             from pandarallel import pandarallel
-            pandarallel.initialize(nb_workers=nb_workers)
+            pandarallel.initialize(nb_workers=nb_workers, progress_bar=True)
             _df = pd.Series(hpo.phen2gene_hpo_list,
                             hpo.phen2gene_hpo_list).parallel_apply(func)
         except BaseException:
             Warning('Failed to run in parallel mode, using 1 worker')
-            __df = pd.Series(hpo.phen2gene_hpo_list, hpo.phen2gene_hpo_list).progress_apply(func)
+            _df = pd.Series(hpo.phen2gene_hpo_list, hpo.phen2gene_hpo_list).progress_apply(func)
     else:
         _df = pd.Series(hpo.phen2gene_hpo_list, hpo.phen2gene_hpo_list).progress_apply(func)
     # return _df
@@ -64,17 +64,6 @@ def build(nb_workers=1):
     hpo = HPO()
     logger.info(f'Building HPO-HPO file for HPO.{hpo.version}')
     create_hpo_hpo_pkl(hpo)
-    logger.info(f'Building Gene-HPo file')
+    logger.info(f'Building Gene-HPO file')
     create_hpo_gene_pkl(hpo, nb_workers=nb_workers)
     logger.info('Finish building HPO data file')
-
-# if __name__ == '__main__':
-#     pandarallel.initialize(progress_bar=True, nb_workers=4)
-#     for use_full, seri_full in it.product([True, False], repeat=2):
-#         version = f'2021-12-17-{use_full}-{seri_full}'
-#         hpo_config = hpo_util.get_hpo_config(version)
-#         logger.info(f'Creating... HPO-HPO pickle file for version {version}')
-#         # create_hpo_hpo_pkl(hpo_config, use_full, seri_full=seri_full)
-#         logger.info(f'finished creating HPO-HPO pickle file')
-#         create_hpo_gene_pkl(hpo_config, use_full=use_full, seri_full=seri_full)
-#         logger.info(f'finished creating HPO-Gene pickle file')
